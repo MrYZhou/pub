@@ -14,5 +14,5 @@ f5调试启动
 
 ### 打包
 ```
-go build -tags=prod -ldflags "-w -s" . && upx pub.exe
+go build -ldflags "-w -s" . && upx pub.exe
 ```

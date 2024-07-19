@@ -2,6 +2,7 @@ package util
 
 import (
 	"os"
+	"path/filepath"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -18,8 +19,10 @@ func App() *fiber.App {
 		// 静态文件服务
 		homeDir, _ := os.UserHomeDir()
 		currentDir, _ := os.Getwd()
-		app.Static("/file", currentDir+"/static")
-		app.Static("/", homeDir+"/pub")
+		staticPath := filepath.Join(currentDir, "static")
+		homePath := filepath.Join(homeDir, "pub")
+		app.Static("/file", staticPath)
+		app.Static("/", homePath)
 	}
 
 	return app
