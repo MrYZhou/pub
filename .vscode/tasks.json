@@ -1,0 +1,11 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build", // 这是会被"preLaunchTask"引用的任务名称
+      "type": "process",
+      "command": "air", // 要执行的命令,前提是已经安装了命令
+      "problemMatcher": [] // 如果你的命令会产生问题输出，可以在这里添加匹配规则来高亮显示错误和警告
+    }
+  ]
+}

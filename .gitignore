@@ -1,0 +1,10 @@
+.env
+chunk*
+*.jar
+autopub*.exe
+.VSCodeCounter
+main
+test/local_test.go
+tmp
+air
+
