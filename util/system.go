@@ -1,6 +1,7 @@
 package util
 
 import (
+	. "log/slog"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
@@ -23,11 +24,13 @@ func App() *fiber.App {
 			homeDir, _ := os.UserHomeDir()
 			staticDir = homeDir + "/pub"
 		}
-		// docker部署有可能有环境变量
+
 		staticDirEnv := os.Getenv("staticDir")
 		if staticDirEnv != "" {
 			staticDir = staticDirEnv
 		}
+
+		Info("映射目录" + staticDir)
 		app.Static("/", staticDir)
 	}
 

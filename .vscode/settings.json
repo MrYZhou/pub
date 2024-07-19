@@ -8,7 +8,7 @@
         "**/Thumbs.db": true,
         "**/*.exe":true,
         "**/.air.toml":true,
-        "**/.gitignore":true,
+        // "**/.gitignore":true,
         "**/go.sum":true,
         "**/init.sql":true
     }
