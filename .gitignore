@@ -1,7 +1,7 @@
 .env
 chunk*
 *.jar
-autopub*.exe
+pub.exe
 .VSCodeCounter
 main
 test/local_test.go
