@@ -1,25 +1,39 @@
-package router
-
+package api
+/**
+控制层
+*/
 import (
 	"github.com/gofiber/fiber/v2"
 
 	. "pub/server"
 	. "pub/util"
 )
-
-// 部署应用
 func init() {
 	app := App()
 
 	// 创建子路由
 	api := app.Group("/pub")
 	api.Get("/", pub)
+	// 根据id发布docker部署
+	api.Post("startProject", startProject)
 
+	// 裸机部署,需要配合下使用脚本
 	app.Post("pubweb", pubweb)
-
+	// 裸机部署,需要配合下使用脚本
 	app.Post("pubjava", pubjava)
+	// 上传env部署文件,到static目录或者是用户的pub目录
+	app.Post("uploadEnv", uploadEnv)
+
 }
 func pub(c *fiber.Ctx) error {
+	return AppResult(c).Success()
+}
+func startProject(c *fiber.Ctx) error {
+
+	return AppResult(c).Success()
+}
+func uploadEnv(c *fiber.Ctx) error {
+
 	return AppResult(c).Success()
 }
 

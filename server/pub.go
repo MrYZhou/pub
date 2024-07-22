@@ -1,5 +1,8 @@
 package server
 
+/**
+抽业务层是为了代码可复用。下面这些代码和框架无关都可以直接迁移走的
+*/
 import (
 	. "log/slog"
 
