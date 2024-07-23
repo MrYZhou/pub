@@ -13,7 +13,7 @@ import (
 /*
 发布web应用
 */
-func Pubweb(model WebrUpload) error {
+func Pubweb(model WebUpload) error {
 	localPath := model.LocalPath
 	remotePath := model.RemotePath
 	con := Myserver()
@@ -79,7 +79,17 @@ type JarUpload struct {
 }
 
 // web应用的模型
-type WebrUpload struct {
+type WebUpload struct {
 	LocalPath  string `json:"localPath"`  // 本地web项目路径
 	RemotePath string `json:"remotePath"` // 远程web项目路径
 }
+
+// ServerConfig 定义单个服务器的配置结构
+type ServerConfig struct {
+	Host     string `json:"host"`
+	User     string `json:"user"`
+	Password string `json:"password"`
+}
+
+// Config 定义整个配置结构，使用 map 存储多个 ServerConfig
+type Config map[string]ServerConfig

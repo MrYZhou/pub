@@ -1,8 +1,7 @@
 package util
 
 import (
-	"os"
-	"path/filepath"
+	. "pub/common"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -16,13 +15,9 @@ func App() *fiber.App {
 		})
 		// 注册自定义中间件以转换上下文
 		app.Use(CtxMiddleware)
-		// 静态文件服务
-		homeDir, _ := os.UserHomeDir()
-		currentDir, _ := os.Getwd()
-		staticPath := filepath.Join(currentDir, "static")
-		homePath := filepath.Join(homeDir, "pub")
-		app.Static("/file", staticPath)
-		app.Static("/", homePath)
+
+		app.Static("/file", StaticPath)
+		app.Static("/", HomePath)
 	}
 
 	return app

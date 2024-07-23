@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/gofiber/fiber/v2"
 
-	. "pub/api"
+	. "pub/router"
 	. "pub/util"
 )
 

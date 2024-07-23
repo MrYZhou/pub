@@ -1,13 +1,20 @@
-package api
+package router
+
 /**
 控制层
 */
 import (
-	"github.com/gofiber/fiber/v2"
+	"encoding/json"
+	"os"
+	"path/filepath"
 
+	. "pub/common"
 	. "pub/server"
 	. "pub/util"
+
+	"github.com/gofiber/fiber/v2"
 )
+
 func init() {
 	app := App()
 
@@ -29,16 +36,34 @@ func pub(c *fiber.Ctx) error {
 	return AppResult(c).Success()
 }
 func startProject(c *fiber.Ctx) error {
+	jsonPath := filepath.Join(StaticPath, "host.json")
+	jsonFile, _ := os.ReadFile(jsonPath)
+	var config Config
+	json.Unmarshal(jsonFile, &config)
 
-	return AppResult(c).Success()
+	return AppResult(c).Success(config["1"])
 }
 func uploadEnv(c *fiber.Ctx) error {
+	// 处理文件上传
+	file, err := c.FormFile("file") // 假设表单字段名为 "file"
+	if err != nil {
+		return AppResult(c).Fail("文件上传失败")
+	}
 
+	// 保存文件到目录
+	savePath := filepath.Join(StaticPath, ".env")
+	homePath := filepath.Join(HomeDir+"/pub", ".env")
+	if err := c.SaveFile(file, savePath); err != nil {
+		return AppResult(c).Fail("文件保存失败")
+	}
+	if err := c.SaveFile(file, homePath); err != nil {
+		return AppResult(c).Fail("文件保存失败")
+	}
 	return AppResult(c).Success()
 }
 
 func pubweb(c *fiber.Ctx) error {
-	var model WebrUpload
+	var model WebUpload
 	// 从请求体中读取JSON内容并反序列化
 	if err := c.BodyParser(&model); err != nil {
 		return AppResult(c).Fail("请求体数据解析错误")

@@ -8,4 +8,5 @@ test/local_test.go
 tmp
 air
 *debug*.exe
+.env
 
