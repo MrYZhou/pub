@@ -13,15 +13,18 @@ func GetServer(s ServerConfig) *Cli {
 	con, _ := Server(s.Host, s.User, s.Password)
 	return con
 }
-func GetPub(pubType string) Publisher {
+// GetPub 泛型工厂函数
+func GetPub[T Publisher](pubType string) (T, error) {
+	var pub T
 	switch pubType {
 	case "web":
-		return NewWebHelper()
+		pub = NewWebHelper().(T)
 	case "java":
-		return NewJavaHelper()
+		pub = NewJavaHelper().(T)
 	default:
-		return nil
+		return pub, fmt.Errorf("unknown publisher type: %s", pubType)
 	}
+	return pub, nil
 }
 
 /*

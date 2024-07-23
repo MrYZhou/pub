@@ -40,16 +40,16 @@ func Pubjava(model JarUpload) error {
 	javaProjectPath := model.JavaProjectPath
 	localJarPath := model.LocalJarPath
 	remotePath := model.RemotePath
-	pubCommand := model.PubCommand
+	packageCommand := model.PackageCommand
 	execCommand := model.ExecCommand
-	if pubCommand == "" {
-		pubCommand = "mvn -Dfile.encoding=UTF-8 package"
+	if packageCommand == "" {
+		packageCommand = "mvn -Dfile.encoding=UTF-8 package"
 	}
 	con := Myserver()
 	defer con.Client.Close()
 	defer con.SftpClient.Close()
 	Info("开始打包")
-	err := Run(javaProjectPath, pubCommand)
+	err := Run(javaProjectPath, packageCommand)
 	if err != nil {
 		return err
 	}
