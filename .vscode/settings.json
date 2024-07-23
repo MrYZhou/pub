@@ -9,7 +9,7 @@
         "**/*.exe":true,
         "**/.air.toml":true,
         // "**/.gitignore":true,
-        "**/go.sum":true,
+        // "**/go.sum":true,
         "**/init.sql":true
     }
 }
