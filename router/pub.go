@@ -42,6 +42,8 @@ func startProject(c *fiber.Ctx) error {
 	defer con.Client.Close()
 	defer con.SftpClient.Close()
 	con.Run("pwd")
+	data := WebUpload{LocalPath: "1", RemotePath: "2"}
+	ExecPub("1", data)
 	return AppResult(c).Success(con)
 }
 func uploadEnv(c *fiber.Ctx) error {

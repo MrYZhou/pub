@@ -13,18 +13,24 @@ func GetServer(s ServerConfig) *Cli {
 	con, _ := Server(s.Host, s.User, s.Password)
 	return con
 }
-// GetPub 泛型工厂函数
-func GetPub[T Publisher](pubType string) (T, error) {
-	var pub T
-	switch pubType {
-	case "web":
-		pub = NewWebHelper().(T)
-	case "java":
-		pub = NewJavaHelper().(T)
-	default:
-		return pub, fmt.Errorf("unknown publisher type: %s", pubType)
+
+
+// ExecPub 泛型函数
+func ExecPub(pubType string, data any) error {
+	if webData, ok := data.(WebUpload); ok {
+		webHelper.ExecPub(webData)
 	}
-	return pub, nil
+
+	if javaData, ok := data.(JarUpload); ok {
+		javaHelper.ExecPub(javaData)
+	}
+	return nil
+	// switch pubType {
+	// case "web":
+	// 	webHelper.ExecPub(data.(WebUpload))
+	// case "java":
+	// 	javaHelper.ExecPub(data.(JarUpload))
+	// }
 }
 
 /*

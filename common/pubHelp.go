@@ -6,39 +6,19 @@ import (
 	. "github.com/MrYZhou/outil/command"
 )
 
-type Publisher interface {
-	ExecPub()
-	packageCode()
-	upload()
-}
-
-
 // WebHelper 结构体
 type WebHelper struct{}
-
-// 实现 Publisher 接口的 Publish 方法
-func (w WebHelper) Publish() {
-	// 实现细节
-}
 
 // JavaHelper 结构体
 type JavaHelper struct{}
 
-// 实现 Publisher 接口的 Publish 方法
-func (j JavaHelper) Publish() {
-	// 实现细节
-}
+var webHelper WebHelper
+var javaHelper JavaHelper
 
-// NewWebHelper 函数
-func NewWebHelper() WebHelper {
-	return WebHelper{}
+func init() {
+	webHelper = WebHelper{}
+	javaHelper = JavaHelper{}
 }
-
-// NewJavaHelper 函数
-func NewJavaHelper() JavaHelper {
-	return JavaHelper{}
-}
-
 func (web *WebHelper) ExecPub(data WebUpload) {
 	web.packageCode(data)
 	web.upload(data)
