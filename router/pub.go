@@ -4,8 +4,6 @@ package router
 控制层
 */
 import (
-	"encoding/json"
-	"os"
 	"path/filepath"
 
 	. "pub/common"
@@ -36,12 +34,13 @@ func pub(c *fiber.Ctx) error {
 	return AppResult(c).Success()
 }
 func startProject(c *fiber.Ctx) error {
-	jsonPath := filepath.Join(StaticPath, "host.json")
-	jsonFile, _ := os.ReadFile(jsonPath)
-	var config Config
-	json.Unmarshal(jsonFile, &config)
+	var model PubInfo
+	if err := c.BodyParser(&model); err != nil {
+		return AppResult(c).Fail("请求体数据解析错误")
+	}
+	con := GetServer(Host[model.HostId])
 
-	return AppResult(c).Success(config["1"])
+	return AppResult(c).Success(con)
 }
 func uploadEnv(c *fiber.Ctx) error {
 	// 处理文件上传

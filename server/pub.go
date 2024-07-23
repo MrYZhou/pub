@@ -5,6 +5,7 @@ package server
 */
 import (
 	. "log/slog"
+	. "pub/common"
 
 	. "github.com/MrYZhou/outil/command"
 	. "github.com/MrYZhou/outil/ssh"
@@ -68,28 +69,3 @@ func Myserver() *Cli {
 	con, _ := Server(host, user, password)
 	return con
 }
-
-// java应用的模型
-type JarUpload struct {
-	JavaProjectPath string `json:"javaProjectPath"` // java项目根路径
-	LocalJarPath    string `json:"localJarPath"`    // 生成的jar文件路径
-	RemotePath      string `json:"remotePath"`      // 远程路径
-	PubCommand      string `json:"pubCommand"`      // 发布命令或打包命令
-	ExecCommand     string `json:"execCommand"`     // 后置发布命令
-}
-
-// web应用的模型
-type WebUpload struct {
-	LocalPath  string `json:"localPath"`  // 本地web项目路径
-	RemotePath string `json:"remotePath"` // 远程web项目路径
-}
-
-// ServerConfig 定义单个服务器的配置结构
-type ServerConfig struct {
-	Host     string `json:"host"`
-	User     string `json:"user"`
-	Password string `json:"password"`
-}
-
-// Config 定义整个配置结构，使用 map 存储多个 ServerConfig
-type Config map[string]ServerConfig
