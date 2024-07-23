@@ -39,7 +39,9 @@ func startProject(c *fiber.Ctx) error {
 		return AppResult(c).Fail("请求体数据解析错误")
 	}
 	con := GetServer(Host[model.HostId])
-
+	defer con.Client.Close()
+	defer con.SftpClient.Close()
+	con.Run("pwd")
 	return AppResult(c).Success(con)
 }
 func uploadEnv(c *fiber.Ctx) error {

@@ -29,7 +29,7 @@ type JarUpload struct {
 	JavaProjectPath string `json:"javaProjectPath"` // java项目根路径
 	LocalJarPath    string `json:"localJarPath"`    // 生成的jar文件路径
 	RemotePath      string `json:"remotePath"`      // 远程路径
-	PubCommand      string `json:"pubCommand"`      // 发布命令或打包命令
+	PubCommand      string `json:"pubCommand"`      // 打包jar命令
 	ExecCommand     string `json:"execCommand"`     // 后置发布命令
 	ImageName       string `json:"imageName"`       // 生成镜像名
 	ContainerName   string `json:"containerName"`   // 部署容器名
