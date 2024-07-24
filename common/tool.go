@@ -1,11 +1,12 @@
 package common
 
 import (
-	// . "github.com/MrYZhou/outil/command"
-	"fmt"
+	. "log/slog"
 	"os"
 	"path"
+	"strings"
 
+	. "github.com/MrYZhou/outil/command"
 	. "github.com/MrYZhou/outil/ssh"
 )
 
@@ -14,23 +15,24 @@ func GetServer(s ServerConfig) *Cli {
 	return con
 }
 
+func PubProject(model PubInfo) {
+	con := GetServer(Host[model.HostId])
+	project := Project[model.ProjectId]
+	defer con.Client.Close()
+	defer con.SftpClient.Close()
+	ExecPub(con, project)
+}
 
 // ExecPub 泛型函数
-func ExecPub(pubType string, data any) error {
+func ExecPub(con *Cli, data any) error {
 	if webData, ok := data.(WebUpload); ok {
-		webHelper.ExecPub(webData)
+		webHelper.ExecPub(con, webData)
 	}
 
 	if javaData, ok := data.(JarUpload); ok {
-		javaHelper.ExecPub(javaData)
+		javaHelper.ExecPub(con, javaData)
 	}
 	return nil
-	// switch pubType {
-	// case "web":
-	// 	webHelper.ExecPub(data.(WebUpload))
-	// case "java":
-	// 	javaHelper.ExecPub(data.(JarUpload))
-	// }
 }
 
 /*
@@ -63,15 +65,90 @@ func InitDockerfile(c *Cli, remoteJarHome string, name string) bool {
 		b = []byte("EXPOSE " + port)
 		ftpFile.Write(b)
 		imageName := os.Getenv("imageName")
-		fmt.Println("正在构建镜像")
+		Info("正在构建镜像")
 		build := "docker build -f " + dockerFilePath + " -t  " + imageName + " " + remoteJarHome
 		msg, err := c.Run(build)
 		if err != nil {
-			fmt.Println(err)
+			Info(err.Error())
 		}
-		fmt.Println(msg)
-		fmt.Println("构建完成")
+		Info(msg)
+		Info("构建完成")
 
 	}
 	return init
+}
+
+/*
+init 没有生成过dockerfile文件,init为false
+*/
+func RunContainer(init bool, c *Cli) {
+	Info("运行容器")
+	direct := ""
+	javaContainerName := os.Getenv("javaContainerName")
+	imageName := os.Getenv("imageName")
+	remoteJarHome := os.Getenv("remoteJarHome")
+	port := os.Getenv("port") + ":" + os.Getenv("port")
+
+	if init == false {
+		// 不需要输出,下面两行考虑到容器名可能已经存在,需要先移除
+		c.RunQuiet("docker stop " + javaContainerName)
+		c.RunQuiet("docker rm " + javaContainerName)
+		// 需要映射目录这样restart才有意义
+		direct = "docker run -d --name " + javaContainerName + " -p " + port + " -v " + remoteJarHome + ":/java " + imageName
+	} else {
+		direct = "docker restart " + javaContainerName
+	}
+	c.Run(direct)
+}
+
+// WebHelper 结构体
+type WebHelper struct{}
+
+// JavaHelper 结构体
+type JavaHelper struct{}
+
+var webHelper WebHelper
+var javaHelper JavaHelper
+
+func init() {
+	webHelper = WebHelper{}
+	javaHelper = JavaHelper{}
+}
+func (web *WebHelper) ExecPub(con *Cli, data WebUpload) {
+	web.packageCode(data)
+	web.upload(con, data)
+}
+func (web *WebHelper) packageCode(data WebUpload) {
+	Info("打包web应用")
+	Run(data.LocalPath, "npm run build")
+}
+func (web *WebHelper) upload(con *Cli, data WebUpload) {
+	Info("上传web应用")
+	con.UploadDir(data.LocalPath, data.RemotePath)
+}
+
+func (java *JavaHelper) ExecPub(con *Cli, data JarUpload) {
+	java.packageCode(data)
+
+	// 获取jarFilePath的jar文件名
+	file, _ := os.Open(data.LocalPath)
+	name := file.Name()
+	data.JarName = name
+
+	java.upload(con, data)
+	// 镜像构建
+	init := InitDockerfile(con, data.RemoteHome, name)
+	// 运行容器
+	RunContainer(init, con)
+}
+func (java *JavaHelper) packageCode(data JarUpload) {
+	Info("打包java应用")
+	Run(data.JavaProjectPath, data.PackageCommand)
+}
+func (java *JavaHelper) upload(con *Cli, data JarUpload) {
+	Info("上传java应用")
+	fileList := con.SliceUpload(data.RemoteHome, data.LocalPath, 6)
+	con.ConcatRemoteFile(fileList, data.RemotePath)
+	con.Run("rm -rf " + strings.Join(fileList, " "))
+
 }

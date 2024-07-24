@@ -38,13 +38,9 @@ func startProject(c *fiber.Ctx) error {
 	if err := c.BodyParser(&model); err != nil {
 		return AppResult(c).Fail("请求体数据解析错误")
 	}
-	con := GetServer(Host[model.HostId])
-	defer con.Client.Close()
-	defer con.SftpClient.Close()
-	con.Run("pwd")
-	data := WebUpload{LocalPath: "1", RemotePath: "2"}
-	ExecPub("1", data)
-	return AppResult(c).Success(con)
+	a := filepath.Dir("D:/Users/JNPF/Desktop/jnpf-crm2-java/jnpf-admin/target/jnpf-admin-3.4.5-RELEASE.jar")
+	// PubProject(model)
+	return AppResult(c).Success(a, "部署完成")
 }
 func uploadEnv(c *fiber.Ctx) error {
 	// 处理文件上传

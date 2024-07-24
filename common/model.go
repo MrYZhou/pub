@@ -26,9 +26,11 @@ type PubInfo struct {
 
 // java应用的模型
 type JarUpload struct {
-	JavaProjectPath string `json:"javaProjectPath"` // java项目根路径
-	LocalJarPath    string `json:"localJarPath"`    // 生成的jar文件路径
-	RemotePath      string `json:"remotePath"`      // 远程路径
+	JavaProjectPath string `json:"javaProjectPath"` // 本地java项目根路径
+	JarName         string `json:"jarName"`         // jar文件名称
+	LocalPath       string `json:"localPath"`       // 本地打包的jar文件路径
+	RemoteHome      string `json:"remoteHome"`      // 远程jar文件根目录
+	RemotePath      string `json:"remotePath"`      // 远程的jar文件路径
 	PackageCommand  string `json:"packageCommand"`  // 打包jar命令
 	ExecCommand     string `json:"execCommand"`     // 后置发布命令
 	ImageName       string `json:"imageName"`       // 生成镜像名

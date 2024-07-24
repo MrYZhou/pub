@@ -38,7 +38,7 @@ func Pubweb(model WebUpload) error {
 */
 func Pubjava(model JarUpload) error {
 	javaProjectPath := model.JavaProjectPath
-	localJarPath := model.LocalJarPath
+	localPath := model.LocalPath
 	remotePath := model.RemotePath
 	packageCommand := model.PackageCommand
 	execCommand := model.ExecCommand
@@ -54,7 +54,7 @@ func Pubjava(model JarUpload) error {
 		return err
 	}
 	Info("开始上传")
-	con.UploadFile(localJarPath, remotePath)
+	con.UploadFile(localPath, remotePath)
 	con.Run(execCommand)
 	Info("上传完毕")
 	return nil
