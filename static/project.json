@@ -1,7 +1,9 @@
 {
     "1":{
         "type":"java",
-        "name":"java项目",
-        "content":"{}"
+        "name":"web项目",
+        "content":"{}",
+        "localPath":"D:/java/java项目",
+        "remotePath":"/root/aa"
     }
 }

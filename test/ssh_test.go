@@ -1,6 +1,7 @@
 package main
 
 import (
+	. "log/slog"
 	"testing"
 
 	. "github.com/MrYZhou/outil/ssh"
@@ -9,11 +10,20 @@ import (
 // 测试连通性
 func TestConnect(t *testing.T) {
 
-	c, err := Server("121.5.68.242:22", "root", "!123qweA")
+	c, err := Server("47.120.11.192", "root", "!123qweA")
 	if err != nil {
 		Info("连接失败")
 	} else {
-		Info(c)
+		Info(c.Host)
+	}
+}
+func TestConnect2(t *testing.T) {
+	// 通过密钥
+	c, err := Server("47.120.11.192", "root", "!123qweA")
+	if err != nil {
+		Info("连接失败")
+	} else {
+		Info(c.Host)
 	}
 }
 
