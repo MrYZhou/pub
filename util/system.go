@@ -11,7 +11,7 @@ var app *fiber.App
 func App() *fiber.App {
 	if app == nil {
 		app = fiber.New(fiber.Config{
-			DisableStartupMessage: true, // 禁用启动横幅
+			DisableStartupMessage: false, // 禁用启动横幅
 		})
 		// 注册自定义中间件以转换上下文
 		app.Use(CtxMiddleware)
